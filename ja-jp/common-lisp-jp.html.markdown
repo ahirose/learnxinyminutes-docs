@@ -6,97 +6,97 @@ contributors:
   - ["Paul Nathan", "https://github.com/pnathan"]
 ---
 
-ANSI Common Lisp �́A�l�X�ȕ���̍H�ƃA�v���P�[�V�����Ɏg����A
-�ėp�I�ȃ}���`�p���_�C���v���O���~���O����ł��B
-�v���O�����\�ȃv���O���~���O����Ƃ��āA�悭�m���Ă��܂��B
+ANSI Common Lisp は、様々な分野の工業アプリケーションに使える、
+汎用的なマルチパラダイムプログラミング言語です。
+プログラム可能なプログラミング言語として、よく知られています。
 
-Lisp���n�߂�l�����́A�ÓT�I�ȃN�����͂�����[Practical Common Lisp(�����œǂ߂܂�)](http://www.gigamonkeys.com/book/)
+Lispを始める人向けのクラシック文書はこちら[Practical Common Lisp(無料で読めます)](http://www.gigamonkeys.com/book/)
 
-�V�������̂Ƃ��Ă͂�����[Land of Lisp](http://landoflisp.com/).
+新しいものとしてはこちら[Land of Lisp](http://landoflisp.com/).
 
 
 
 ```scheme
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 0. ���@
+;;; 0. 文法
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; ��ʓI�Ȍ`
+;;; 一般的な形
 
-;; Lisp�̕��@�ɂ́A��̊�b�I�ȗv�f������܂��B�A�g����S���ł�
-;; ��ʓI�ɁA�܂Ƃ܂���S�����t�H�[���Ƃ����܂�
+;; Lispの文法には、二つの基礎的な要素があります。アトムとS式です
+;; 一般的に、まとまったS式をフォームといいます
 
-10  ; �A�g���ł�; ���ꎩ�g��]�����܂�
+10  ; アトムです; これ自身を評価します
 
-:THING ;�ʂ̃A�g���ł�; �V���{���� :thing ��]�����܂�
+:THING ;別のアトムです; シンボルの :thing を評価します
 
-t  ; �ʂ̃A�g���ł��Btrue���Ӗ����܂�
+t  ; 別のアトムです。trueを意味します
 
-(+ 1 2 3 4) ; S���ł�
+(+ 1 2 3 4) ; S式です
 
-'(4 :foo  t)  ;�ʂ�S���ł�
+'(4 :foo  t)  ;別のS式です
 
 
-;;; �R�����g�ł�
+;;; コメントです
 
-;; �R�����g�s�́A�Z�~�R����;��Ŏn�܂�܂��B�g�������Ƃ��ẮA��g���ƕ��ʂ̃R�����g�ŁA
-;; �O�̓Z�N�V�����R�����g�A�l�̓t�@�C�����x���ł̃R�����g�Ƃ���܂�
+;; コメント行は、セミコロン;一つで始まります。使い分けとしては、二つ使うと普通のコメントで、
+;; 三つはセクションコメント、四つはファイルレベルでのコメントとされます
 
-#| �u���b�N�R�����g�ł��B
-   �����s���R�����g�Ƃ��Ĉ��������ł��܂��A�܂��A
+#| ブロックコメントです。
+   複数行をコメントとして扱う事ができます、また、
     #|
-       ����q�ɂ��ł��܂��I
+       入れ子にもできます！
     |#
 |#
 
-;;; ��
+;;; 環境
 
-;; �l�X�Ȏ��������݂��Ă���A�قƂ�ǂ͕W���ɏ����������̂ł��B
-;; �ŏ��� CLISP ���悢�Ǝv���܂�
+;; 様々な実装が存在しており、ほとんどは標準に準拠したものです。
+;; 最初は CLISP がよいと思います
 
-;; ���C�u�����́AQuicklisp.org��Quicklisp�V�X�e���ŊǗ�����Ă��܂��B
+;; ライブラリは、Quicklisp.orgのQuicklispシステムで管理されています。
 
-;; Common Lisp �̊J���́A�e�L�X�g�G�f�B�^��
-;; REPL�iRead Evaluate Print Loop�A�Θb�^�]����) �𓯎��ɂ����čs���܂��B
-;; REPL���g���ƁA�v���O�����̎��s�ƃ\�[�X�̊m�F�𓯎��ɁA�o�����ł�邱�Ƃ��ł��܂��B
+;; Common Lisp の開発は、テキストエディタと
+;; REPL（Read Evaluate Print Loop、対話型評価環境) を同時につかって行います。
+;; REPLを使うと、プログラムの実行とソースの確認を同時に、双方向でやることができます。
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 1. Primitive Datatypes and Operators
+;;; 1. プリミティブ型と演算子
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; Symbols
+;;; シンボル
 
-'foo ; => FOO  Notice that the symbol is upper-cased automatically.
+'foo ; =>FOOが返ります。シンボルは自動的に大文字になります。
 
-;; Intern manually creates a symbol from a string.
+;; internは、文字列からシンボルを作ります
 
 (intern "AAAA") ; => AAAA
 
 (intern "aaa") ; => |aaa|
 
-;;; Numbers
-9999999999999999999999 ; integers
-#b111                  ; binary => 7
-#o111                  ; octal => 73
-#x111                  ; hexadecimal => 273
-3.14159s0              ; single
-3.14159d0              ; double
-1/2                    ; ratios
-#C(1 2)                ; complex numbers
+;;; 数字
+9999999999999999999999 ; 整数
+#b111                  ; 2進数(binary) => 7
+#o111                  ; 8進数(octal) => 73
+#x111                  ; 16進数(hexadecimal) => 273
+3.14159s0              ; 単精度（single）
+3.14159d0              ; 倍精度（double）
+1/2                    ; 比率
+#C(1 2)                ; 複素数
 
 
-;; Function application is written (f x y z ...)
-;; where f is a function and x, y, z, ... are operands
-;; If you want to create a literal list of data, use ' to stop it from
-;; being evaluated - literally, "quote" the data.
+;; 関数は (f x y z ...) のように書きます
+;; f が関数で、x,y,z, ... は演算対象です
+;; 値を評価せずに、そのまま文字リストとして見たい場合は、' を使うと、
+;; データの引用(quote)ができます
 '(+ 1 2) ; => (+ 1 2)
-;; You can also call a function manually:
+;; 関数を指定して、呼び出すことができます
 (funcall #'+ 1 2 3) ; => 6
-;; Some arithmetic operations
+;; 計算用の演算子
 (+ 1 1)              ; => 2
-(- 8 1)              ; => 
+(- 8 1)              ; => 7
 (* 10 2)             ; => 20
 (expt 2 3)           ; => 8
 (mod 5 2)            ; => 1
@@ -104,67 +104,66 @@ t  ; �ʂ̃A�g���ł��Btrue���Ӗ����܂�
 (/ 1 3)              ; => 1/3
 (+ #C(1 2) #C(6 -4)) ; => #C(7 -2)
 
-                     ;;; Booleans
-t                    ; for true (any not-nil value is true)
-nil                  ; for false - and the empty list
+                     ;;; ブーリアン
+t                    ; true (not-nil 値はすべて true)
+nil                  ; falseと、空リスト
 (not nil)            ; => t
 (and 0 t)            ; => t
 (or 0 nil)           ; => 0
 
-                     ;;; Characters
+                     ;;; 文字
 #\A                  ; => #\A
-#\λ                  ; => #\GREEK_SMALL_LETTER_LAMDA
+#\λ               ; => #\GREEK_SMALL_LETTER_LAMDA
 #\u03BB              ; => #\GREEK_SMALL_LETTER_LAMDA
 
-;;; Strings are fixed-length arrays of characters.
+;;; 文字列は、文字の固定長配列
 "Hello, world!"
-"Benjamin \"Bugsy\" Siegel"   ; backslash is an escaping character
+"Benjamin \"Bugsy\" Siegel"   ; バックスラッシュは、エスケープ文字です
 
-;; Strings can be concatenated too!
+;; 文字列は、結合できます
 (concatenate 'string "Hello " "world!") ; => "Hello world!"
 
-;; A string can be treated like a sequence of characters
+;; 文字列は、連続した文字としても取り扱えます
 (elt "Apple" 0) ; => #\A
 
-;; format can be used to format strings:
+;; formatは文字列の整形に使えます
 (format nil "~a can be ~a" "strings" "formatted")
 
-;; Printing is pretty easy; ~% is the format specifier for newline.
+;; 表示は簡単です。~% で改行を指定できます
 (format t "Common Lisp is groovy. Dude.~%")
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 2. Variables
+;; 2. 変数
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; You can create a global (dynamically scoped) using defparameter
-;; a variable name can use any character except: ()",'`;#|\
+;; defパラメータで、グローバル（動的スコープ）の変数が作れます
+;; 変数名には、 ()",'`;#|\ 以外の文字を使えます
 
-;; Dynamically scoped variables should have earmuffs in their name!
+;; 動的スコープ変数は、変数名に*耳当て*が必要です
 
 (defparameter *some-var* 5)
 *some-var* ; => 5
 
-;; You can also use unicode characters.
+;; ユニコード文字も使えます
 (defparameter *AΛB* nil)
 
 
-;; Accessing a previously unbound variable is an
-;; undefined behavior (but possible). Don't do it.
+;; 事前に指定をされていない変数にアクセスした場合の挙動は定義されていないので、やらないでください。
+;; 一応可能ではあります
 
 
-;; Local binding: `me` is bound to "dance with you" only within the
-;; (let ...). Let always returns the value of the last `form` in the
-;; let form.
+;; ローカルバインディングについて。
+;; 以下で、`me` は "dance with you" に、(let ...)内でのみ、バインドされます
+;; letは、常にletフォーム内の最終`form`を返します
 
 (let ((me "dance with you"))
   me)
 ;; => "dance with you"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 3. Structs and Collections
+;; 3. 構造体とコレクション
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Structs
+;; 構造体
 (defstruct dog name breed age)
 (defparameter *rover*
     (make-dog :name "rover"
@@ -175,37 +174,37 @@ nil                  ; for false - and the empty list
 (dog-p *rover*) ; => t  ;; ewww)
 (dog-name *rover*) ; => "rover"
 
-;; Dog-p, make-dog, and dog-name are all created by defstruct!
+;; Dog-pと、make-dogと、dog-nameは、すべてdefstructによってつくられたものです
 
-;;; Pairs
-;; `cons' constructs pairs, `car' and `cdr' extract the first
-;; and second elements
+;;; ペア
+;; `cons' はペアを作ります
+;; `car' と `cdr' は、最初と二つ目の要素を抽出します
 (cons 'SUBJECT 'VERB) ; => '(SUBJECT . VERB)
 (car (cons 'SUBJECT 'VERB)) ; => SUBJECT
 (cdr (cons 'SUBJECT 'VERB)) ; => VERB
 
-;;; Lists
+;;; リスト
 
-;; Lists are linked-list data structures, made of `cons' pairs and end
-;; with a `nil' (or '()) to mark the end of the list
+;; リストは、データが結合した構造をもっているものです
+;; `cons'ペアがつながってできており、`nil' (または '()) を、最後尾の目印とします
 (cons 1 (cons 2 (cons 3 nil))) ; => '(1 2 3)
-;; `list' is a convenience variadic constructor for lists
+;; `list' コンストラクタで、簡単にリストを作ることができます
 (list 1 2 3) ; => '(1 2 3)
-;; and a quote can also be used for a literal list value
+;; シングルクォートは、文字のリストを作るために使えます
 '(1 2 3) ; => '(1 2 3)
 
-;; Can still use `cons' to add an item to the beginning of a list
+;; `cons' は、リストの最初に値を追加するためにも使えます
 (cons 4 '(1 2 3)) ; => '(4 1 2 3)
 
-;; Use `append' to - surprisingly - append lists together
+;; `append' （結合）は、--まったく予想外なのですが-- リストを結合します
 (append '(1 2) '(3 4)) ; => '(1 2 3 4)
 
-;; Or use concatenate -
+;; または、concatenateもつかえます
 
 (concatenate 'list '(1 2) '(3 4))
 
-;; Lists are a very central type, so there is a wide variety of functionality for
-;; them, a few examples:
+;; リストはとても重要な型なので、それ用の関数がいろいろとあります
+;; 例は以下です:
 (mapcar #'1+ '(1 2 3))             ; => '(2 3 4)
 (mapcar #'+ '(1 2 3) '(10 20 30))  ; => '(11 22 33)
 (remove-if-not #'evenp '(1 2 3 4)) ; => '(2 4)
@@ -214,23 +213,23 @@ nil                  ; for false - and the empty list
 (butlast '(subject verb object))   ; => (SUBJECT VERB)
 
 
-;;; Vectors
+;;; ベクター
 
-;; Vector's literals are fixed-length arrays
+;; ベクターは、固定長の配列として書きます
 #(1 2 3) ; => #(1 2 3)
 
-;; Use concatenate to add vectors together
+;; ベクター同士を結合するのには、concatenate をつかいます
 (concatenate 'vector #(1 2 3) #(4 5 6)) ; => #(1 2 3 4 5 6)
 
-;;; Arrays
+;;; 配列
 
-;; Both vectors and strings are special-cases of arrays.
+;; ベクターや文字列は、配列の一つです
 
-;; 2D arrays
+;; 2次元配列
 
 (make-array (list 2 2))
 
-;; (make-array '(2 2)) works as well.
+;; (make-array '(2 2)) としても大丈夫です
 
 ; => #2A((0 0) (0 0))
 
@@ -238,36 +237,35 @@ nil                  ; for false - and the empty list
 
 ; => #3A(((0 0) (0 0)) ((0 0) (0 0)))
 
-;; Caution- the default initial values are
-;; implementation-defined. Here's how to define them:
+;; 注意-初期のデフォルト値は、処理系の実相によって異なります
+;; 定義する場合は、以下のようにします
 
 (make-array '(2) :initial-element 'unset)
 
 ; => #(UNSET UNSET)
 
-;; And, to access the element at 1,1,1 -
+;; 1,1,1 の要素にアクセスするためには、以下のようにします
 (aref (make-array (list 2 2 2)) 1 1 1)
 
 ; => 0
 
-;;; Adjustable vectors
+;;; 可変ベクター
 
-;; Adjustable vectors have the same printed representation
-;; as fixed-length vector's literals.
+;; 可変ベクターは、固定長ベクターと同じような定数として書きます
 
 (defparameter *adjvec* (make-array '(3) :initial-contents '(1 2 3)
       :adjustable t :fill-pointer t))
       
 *adjvec* ; => #(1 2 3)
 
-;; Adding new element:
+;; 要素の追加:
 (vector-push-extend 4 *adjvec*) ; => 3
 
 *adjvec* ; => #(1 2 3 4)
 
 
 
-;;; Naively, sets are just lists:
+;;; 単純ですが、セットはリストです:
 
 (set-difference '(1 2 3 4) '(4 5 6 7)) ; => (3 2 1)
 (intersection '(1 2 3 4) '(4 5 6 7)) ; => 4
